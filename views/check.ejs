@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Check user has right to cancle</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <script>
+      const getUserId = () => {
+        const url = new URL(window.location.href);
+        const splitURL = url.pathname.split('/');
+        const id = splitURL[2];
+        console.log(id);
+        document.getElementById('userId').value = id;
+        console.log( document.getElementById('userId').value);
+      }
+    </script>
+  
+  </head>
+  <body>
+    <div class="container"><br />
+      <h1>Check</h1><br />
+      <form action='/cancle' method="post">
+        <div class="row">
+          <div class="col-md-4"></div>
+          <div class="form-group col-md-4">
+            <label for="email">userEmail: </label>
+            <input type="email" class="form-control" name="useremail">
+          </div>
+          <input type="hidden" id="userId" name="userId">
+
+          <div class="col-md-4"></div>
+          <div class="form-group col-md-4">
+            <button type="submit" class="btn btn-success" onclick="getUserId()">Not subscription</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>
