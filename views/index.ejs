@@ -1,60 +1,60 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
   <head>
+    <title>CAU CSE NOTICE</title>
+
     <meta charset="utf-8">
-    <title>CAUCSENOTICE</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="rgb(33, 85, 164)" />
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-    <style>
-      .personalInfoGuide{
-        text-align: center;
-      }
-      .psersonalInfoText{
-        padding: 10px;
-        border: 1px solid black;
-      }
-      .title{
-        font-weight: 900;
-        font-size: 20px;
-      }
-    </style>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
     <script>
-    $(document).ready(function(){
-      $(".psersonalInfoText").toggle();
-    });
-    function showText(){
-      $(".psersonalInfoText").toggle();
-    }
+      function showText() {
+        $(".personalInfoText").toggle();
+      }
     </script>
   </head>
   <body>
-    <div class="container"><br />
-      <h1>Send The Email</h1><br />
-      <form action='/getEmail' method="post">
-        <div class="row">
-          <div class="col-md-4"></div>
-          <div class="form-group col-md-4">
-            <label for="email">userEmail: </label>
-            <input type="email" class="form-control" name="email">
-          </div>
+    <div class="container">
+      <div id="jumbo" class="jumbotron text-center" style="color: rgb(33, 85, 164); background: rgb(230, 230, 230)">
+	<h1>중앙대학교</h1>
+	<h1>소프트웨어대학 알림이</h1>
+        <hr />
+        <p>
+          <a href="https://zeropage.org/">ZeroPage</a>
+          김정민 강영빈 송정우 양운천
+          <br />
+          Email: <a href="mailto:minn951120@naver.com">minn951120@naver.com</a>
+        </p>
+      </div>
 
-          <div class="col-md-4"></div>
-          <div class="form-group col-md-4">
-            <button type="submit" class="btn btn-success">구독</button>
+      <div class="alert alert-warning text-center">
+        <strong>"구독"</strong>
+        버튼을 누르시면
+        <a href="javascript:showText()">개인정보 수집 및 이용 동의</a>를
+        읽고 동의하신 것으로 취급됩니다.
+      </div>
+      <div class="alert alert-info text-center personalInfoText" style="display: none">
+        <strong>개인정보 수집 및 이용에 대한 안내</strong>
+	<hr />
+	<p><b>1. 목적:</b> 개인 식별, 메일 전송</p>
+	<p><b>2. 항목:</b> 이메일 주소</p>
+	<p><b>3. 보유 기간:</b> 구독 취소 시까지</p>
+      </div>
+
+      <form action='/getEmail' method="post">
+	<div class="input-group">
+          <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+          <input type="email" class="form-control" name="email" placeholder="이메일 주소">
+	  <div class="input-group-btn">
+            <button class="btn btn-primary" type="submit">구독</button>
           </div>
         </div>
       </form>
-      <div class="personalInfoGuide">
-        "구독" 버튼을 누르시면 <a href="javascript:showText()">개인정보 수집 및 이용 동의</a>를 읽고 확인하신 것으로 취급됩니다.
-      </div>
-      <div class="psersonalInfoText">
-        <p class="title">개인정보 수집 및 이용에 대한 안내</p>
-        <p>
-          1. 목적 : 개인 식별, 메일 전송<br>
-          2. 항목 : 이메일 주소<br>
-          3. 보유기간 : 구독 취소 시까지 보유<br> 
-        </p>
-      </div>
     </div>
   </body>
 </html>
