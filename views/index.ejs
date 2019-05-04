@@ -16,6 +16,29 @@
       function showText() {
         $(".personalInfoText").toggle();
       }
+      var testEmail = /^[A-Z0-9._%+-]+@([A-Z0-9-]+\.)+[A-Z]{2,4}$/i;
+      $(document).ready(function(){
+        $('#subscribeButton').on('click', function(){
+          var param = $('#emailInput').val();
+          if (param == undefined || !testEmail.test(param)){
+            alert('올바른 형식의 이메일을 입력해주세요.')
+            return;
+          }
+          $.ajax({
+            url: '/getEmail',
+            type: 'POST',
+            data: 'email='+param,
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            success: function(){
+              alert('구독되었습니다.')
+              $('#emailInput').val('');
+            },
+            failure: function(){
+              alert('뭔가 문제가 있는거 같아요. 구독이 안됐어요.')
+            }
+          });
+        });
+      });
     </script>
   </head>
   <body>
@@ -46,12 +69,12 @@
 	<p><b>3. 보유 기간:</b> 구독 취소 시까지</p>
       </div>
 
-      <form action='/getEmail' method="post">
+      <form action='' method="post" id="subscribeForm">
 	<div class="input-group">
           <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
-          <input type="email" class="form-control" name="email" placeholder="이메일 주소">
+          <input id="emailInput" type="email" class="form-control" name="email" placeholder="이메일 주소">
 	  <div class="input-group-btn">
-            <button class="btn btn-primary" type="submit">구독</button>
+            <button class="btn btn-primary" id="subscribeButton" type="button">구독</button>
           </div>
         </div>
       </form>
