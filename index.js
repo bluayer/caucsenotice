@@ -40,13 +40,13 @@ const getUserlist = () => {
 };
 
 const getArticles = () => {
-  const crawl = JSON.parse(fs.readFileSync('./public/article.json', 'utf8'));
+  const crawl = JSON.parse(fs.readFileSync('./public/CCNCrawler/new.json', 'utf8'));
   return crawl;
 };
 
 const mailing = (user, lastNum, crawl, res) => {
   for (let i = 0; i < lastNum + 1; i += 1) {
-    for (let j = 0; j < crawl.articles.length; j += 1) {
+    for (let j = 0; j < crawl.length; j += 1) {
       const transporter = nodemailer.createTransport(smtpPool({
         service: config.mailer.service,
         host: config.mailer.host,
@@ -60,8 +60,8 @@ const mailing = (user, lastNum, crawl, res) => {
       const mailOptions = {
         from: config.mailer.user,
         to: user.table[i].email,
-        subject: crawl.articles[j].title,
-        html: `<a href='${crawl.articles[j].url}'>${crawl.articles[j].title}</a>
+        subject: crawl[j].title,
+        html: `<a href='${crawl[j].url}'>${crawl[j].title}</a>
           <a> 구독을 취소하시려면 </a> 
           <a href='localhost:3000/check/${user.table[i].id}'>여기</a>
           <a>를 클릭해주세요</a>`,
@@ -75,7 +75,6 @@ const mailing = (user, lastNum, crawl, res) => {
         transporter.close();
       });
     }
-    res.redirect('/');
   }
 };
 
