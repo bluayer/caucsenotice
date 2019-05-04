@@ -74,7 +74,7 @@ const mailing = (user, lastNum, crawl) => {
         subject: crawl[j].title,
         html: `<a href='${crawl[j].url}'>${crawl[j].title}</a><br>
           <a> 구독을 취소하시려면 </a> 
-          <a href='localhost:3000/check/${user.table[i].id}'>여기</a>
+          <a href='caucse.online/check/${user.table[i].id}'>여기</a>
           <a>를 클릭해주세요</a>`,
       };
       transporter.sendMail(mailOptions, (err) => {
