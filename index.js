@@ -72,10 +72,11 @@ const mailing = (user, lastNum, crawl) => {
         from: config.mailer.user,
         to: user.table[i].email,
         subject: crawl[j].title,
-        html: `<a href='${crawl[j].url}'>${crawl[j].title}</a><br>
-          <a> 구독을 취소하시려면 </a> 
-          <a href='caucse.online/check/${user.table[i].id}'>여기</a>
-          <a>를 클릭해주세요</a>`,
+        html: `<a href='${crawl[j].url}' style='font-size:13px; color:#000'>${crawl[j].title}</a><br/><br/>
+	  <p style='font-size:11px;color:#777;'>
+           구독을 취소하시려면  
+          <a style='color:#008;' href='http://caucse.online/check/${user.table[i].id}'>여기</a>
+          를 클릭해주세요</p>`,
       };
       transporter.sendMail(mailOptions, (err) => {
         if (err) {
@@ -89,12 +90,16 @@ const mailing = (user, lastNum, crawl) => {
   }
 };
 
-app.post('/getEmail', (req, res) => {
-  fs.readFile('./public/userlist.json', 'utf8', (err, data) => {
+app.post('/getEmail', async (req, res) => {
+  await fs.readFile('./public/userlist.json', 'utf8', async (err, data) => {
     if (err) {
       Console.log(err);
     } else {
       const obj = JSON.parse(data);
+      const duplicatedArray = await obj.table.filter(r => r.email === req.body.email);
+      if(duplicatedArray.length > 0){ 
+        return res.redirect('/');
+      }
       obj.table.push({ id: userNumber, email: req.body.email });
       const json = JSON.stringify(obj);
       fs.writeFile('./public/userlist.json', json, 'utf8', () => {
@@ -102,9 +107,8 @@ app.post('/getEmail', (req, res) => {
       });
       userNumber += 1;
     }
+    return res.redirect('/');
   });
-
-  return res.redirect('/');
 });
 
 const deleteUser = (index) => {
@@ -145,6 +149,11 @@ app.get('/success', (req, res) => {
 
 app.get('/invalid', (req, res) => {
   res.render('invalid');
+});
+
+app.get('/robots.txt', (req, res) => {
+  res.type('text.plain');
+  res.send("User-agent: *\nDisallow: /");
 });
 
 app.listen(port, () => {
