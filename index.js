@@ -7,6 +7,17 @@ require('dotenv').config();
 
 const app = express();
 
+// email send on cron
+var cron = require('node-cron');
+
+// send email every 5 minute
+cron.schedule('*/5 * * * *', async () => {
+  const ul = await getUserlist();
+  const crawl = await getArticles();
+  const { user, lastNum } = await ul;
+  await mailing(user, lastNum, crawl);
+});
+
 
 const Console = console;
 let userNumber = 0;
@@ -40,13 +51,13 @@ const getUserlist = () => {
 };
 
 const getArticles = () => {
-  const crawl = JSON.parse(fs.readFileSync('./public/article.json', 'utf8'));
+  const crawl = JSON.parse(fs.readFileSync('./public/CCNCrawler/new.json', 'utf8'));
   return crawl;
 };
 
-const mailing = (user, lastNum, crawl, res) => {
-  for (let i = 0; i < lastNum + 1; i += 1) {
-    for (let j = 0; j < crawl.articles.length; j += 1) {
+const mailing = (user, lastNum, crawl) => {
+  for (let i = 0; i < lastNum; i += 1) {
+    for (let j = 0; j < crawl.length; j += 1) {
       const transporter = nodemailer.createTransport(smtpPool({
         service: config.mailer.service,
         host: config.mailer.host,
@@ -60,10 +71,10 @@ const mailing = (user, lastNum, crawl, res) => {
       const mailOptions = {
         from: config.mailer.user,
         to: user.table[i].email,
-        subject: crawl.articles[j].title,
-        html: `<a href='${crawl.articles[j].url}'>${crawl.articles[j].title}</a>
+        subject: crawl[j].title,
+        html: `<a href='${crawl[j].url}'>${crawl[j].title}</a><br>
           <a> 구독을 취소하시려면 </a> 
-          <a href='localhost:3000/check/${user.table[i].id}'>여기</a>
+          <a href='caucse.online/check/${user.table[i].id}'>여기</a>
           <a>를 클릭해주세요</a>`,
       };
       transporter.sendMail(mailOptions, (err) => {
@@ -75,17 +86,8 @@ const mailing = (user, lastNum, crawl, res) => {
         transporter.close();
       });
     }
-    res.redirect('/');
   }
 };
-
-app.post('/send', async (req, res) => {
-  const ul = await getUserlist();
-  const crawl = await getArticles();
-  const { user, lastNum } = await ul;
-  await mailing(user, lastNum, crawl, res);
-  return res.redirect('/');
-});
 
 app.post('/getEmail', (req, res) => {
   fs.readFile('./public/userlist.json', 'utf8', (err, data) => {
